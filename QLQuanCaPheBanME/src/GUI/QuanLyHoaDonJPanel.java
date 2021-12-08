@@ -10,20 +10,24 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import Entity.Hoadon;
 import Entity.NhanVien;
+import JDBCHelper.Auth;
+import javax.swing.DefaultComboBoxModel;
+
 /**
  *
  * @author HP
  */
 public class QuanLyHoaDonJPanel extends javax.swing.JPanel {
-SerHoaDon sv=new SerHoaDon();
-Hoadon hd=new Hoadon();
+
+    SerHoaDon sv = new SerHoaDon();
+    Hoadon hd = new Hoadon();
+
     /**
      * Creates new form QuanLyHoaDonJPanel
      */
     public QuanLyHoaDonJPanel() {
         initComponents();
-        init();
-        
+        fillcombo();
     }
 
     /**
@@ -39,6 +43,7 @@ Hoadon hd=new Hoadon();
         jMenuItem2 = new javax.swing.JMenuItem();
         jPopupMenu2 = new javax.swing.JPopupMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblHoadon = new javax.swing.JTable();
@@ -56,6 +61,7 @@ Hoadon hd=new Hoadon();
         jLabel4 = new javax.swing.JLabel();
         txtfind_mnv = new javax.swing.JTextField();
         btn_lammoi = new javax.swing.JButton();
+        cbotrangthai = new javax.swing.JComboBox<>();
 
         jMenuItem2.setText("Hủy Đơn");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
@@ -73,6 +79,14 @@ Hoadon hd=new Hoadon();
         });
         jPopupMenu2.add(jMenuItem1);
 
+        jMenuItem3.setText("Xem Nội Dung Hủy");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jPopupMenu2.add(jMenuItem3);
+
         setBackground(new java.awt.Color(250, 182, 124));
 
         jPanel1.setBackground(new java.awt.Color(250, 182, 124));
@@ -83,11 +97,11 @@ Hoadon hd=new Hoadon();
 
             },
             new String [] {
-                "Mã hóa đơn", "Ngày tạo", "Trạng thái", "Thanh toán", "Người tạo", "Thành tiền", "Số Lượng SP bị hủy"
+                "Mã hóa đơn", "Ngày tạo", "Trạng thái", "Thanh toán", "Người tạo", "Thành tiền", "Số Lượng SP bị hủy", "SDT"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -124,11 +138,11 @@ Hoadon hd=new Hoadon();
 
             },
             new String [] {
-                "Mã hóa đơn", "Ngày tạo", "Trạng thái", "Thanh toán", "Người tạo", "Thành tiền", "Số Lượng SP bị hủy", "Lý Do Hủy"
+                "Mã hóa đơn", "Ngày tạo", "Trạng thái", "Thanh toán", "Người tạo", "Thành tiền", "Số Lượng SP bị hủy", "Lý Do Hủy", "SDT"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true
+                false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -201,6 +215,12 @@ Hoadon hd=new Hoadon();
             }
         });
 
+        cbotrangthai.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbotrangthaiItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -224,7 +244,10 @@ Hoadon hd=new Hoadon();
                             .addComponent(jLabel4))
                         .addGap(43, 43, 43)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtfind_mnv, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(txtfind_mnv, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cbotrangthai, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -252,10 +275,11 @@ Hoadon hd=new Hoadon();
                     .addComponent(jLabel2)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_lammoi))
-                .addGap(23, 23, 23)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtfind_mnv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtfind_mnv, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbotrangthai, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
 
@@ -281,7 +305,7 @@ Hoadon hd=new Hoadon();
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
+                .addContainerGap(14, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(44, 44, 44)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -292,28 +316,52 @@ Hoadon hd=new Hoadon();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimActionPerformed
-         if(jDateChooser1.getDate()==null && jDateChooser2.getDate()==null){
-           JOptionPane.showMessageDialog(this, "vui lòng chọn ít nhất 1 ngày");
-           
-           return;
-       }
-        if(jDateChooser1.getDate()!=null && jDateChooser2.getDate()!=null){
-           sv.Find();
-          
-           
-       }
-      
-       
-       if( jDateChooser1.getDate()==null && jDateChooser2.getDate()!=null  ){
-           sv.Find_1ngay(jDateChooser2.getDate());
-       }
-        if(jDateChooser1.getDate()!=null && jDateChooser2.getDate()==null){
-             sv.Find_1ngay(jDateChooser1.getDate());
-       }
+        if (jDateChooser1.getDate() == null && jDateChooser2.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "vui lòng chọn ít nhất 1 ngày");
+
+            return;
+        }
+        if (jDateChooser1.getDate() != null && jDateChooser2.getDate() != null) {
+            
+             if (cbotrangthai.getSelectedIndex() == 2) {
+                sv.Find();
+            }
+            if (cbotrangthai.getSelectedIndex() == 1) {
+                sv.Find_chuathanhtoan();
+            }
+            if (cbotrangthai.getSelectedIndex() == 0) {
+                sv.Find_dathanhtoan();
+            }
+
+        }
+
+        if (jDateChooser1.getDate() == null && jDateChooser2.getDate() != null) {
+            if (cbotrangthai.getSelectedIndex() == 2) {
+                sv.Find_1ngay(jDateChooser2.getDate());
+            }
+            if (cbotrangthai.getSelectedIndex() == 1) {
+                sv.Find_1ngay_chuathanhtoan(jDateChooser2.getDate());
+            }
+            if (cbotrangthai.getSelectedIndex() == 0) {
+                sv.Find_1ngay_dathanhtoan(jDateChooser2.getDate());
+            }
+
+        }
+        if (jDateChooser1.getDate() != null && jDateChooser2.getDate() == null) {
+            if (cbotrangthai.getSelectedIndex() == 2) {
+                sv.Find_1ngay(jDateChooser1.getDate());
+            }
+            if (cbotrangthai.getSelectedIndex() == 1) {
+                sv.Find_1ngay_chuathanhtoan(jDateChooser1.getDate());
+            }
+            if (cbotrangthai.getSelectedIndex() == 0) {
+                sv.Find_1ngay_dathanhtoan(jDateChooser1.getDate());
+            }
+        }
     }//GEN-LAST:event_btnTimActionPerformed
 
     private void jTextField1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyReleased
-       sv.fillTableSearch(jTextField1.getText());
+        sv.fillTableSearch(jTextField1.getText());
     }//GEN-LAST:event_jTextField1KeyReleased
 
     private void txtfind_mnvKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtfind_mnvKeyReleased
@@ -326,35 +374,36 @@ Hoadon hd=new Hoadon();
     }//GEN-LAST:event_btn_lammoiActionPerformed
 
     private void tblHoadonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoadonMouseClicked
-        int index=tblHoadon.getSelectedRow();
-       
-       int a= (int) tblHoadon.getValueAt(index, 0);
-      
-        HoadonchitietJDialog hd=new HoadonchitietJDialog(a);
+        int index = tblHoadon.getSelectedRow();
+
+        int a = (int) tblHoadon.getValueAt(index, 0);
+
+        HoadonchitietJDialog hd = new HoadonchitietJDialog(a);
         hd.setVisible(true);
         System.out.println("thao đẹp dai ");
     }//GEN-LAST:event_tblHoadonMouseClicked
 
     private void tblhuydonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblhuydonMouseClicked
-          int index=tblhuydon.getSelectedRow();
-       
-       int a= (int) tblhuydon.getValueAt(index, 0);
-      
-        HoadonchitietJDialog hd=new HoadonchitietJDialog(a);
+        int index = tblhuydon.getSelectedRow();
+
+        int a = (int) tblhuydon.getValueAt(index, 0);
+
+        HoadonchitietJDialog hd = new HoadonchitietJDialog(a);
         hd.setVisible(true);
     }//GEN-LAST:event_tblhuydonMouseClicked
 
     private void tblHoadonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoadonMouseReleased
-         int r = tblHoadon.rowAtPoint(evt.getPoint());
+        int r = tblHoadon.rowAtPoint(evt.getPoint());
         if (r >= 0 && r < tblHoadon.getRowCount()) {
             tblHoadon.setRowSelectionInterval(r, r);
         } else {
             tblHoadon.clearSelection();
         }
- 
+
         int rowindex = tblHoadon.getSelectedRow();
-        if (rowindex < 0)
+        if (rowindex < 0) {
             return;
+        }
 //        Hoadon hoadon = DAOHOADON.selectById(Integer.parseInt(tblHoadon.getValueAt(rowindex, 0).toString()));
 //        if (hoadon.getSDT() == null) {
 //            mnTachDon.setEnabled(true);
@@ -367,34 +416,45 @@ Hoadon hd=new Hoadon();
 //            mnGopDon.setEnabled(false);
 //            mnSuaThongtinkhach.setEnabled(true);
 //        }
-        if (evt.isPopupTrigger() && evt.getComponent() instanceof JTable ) {   
+        if (evt.isPopupTrigger() && evt.getComponent() instanceof JTable) {
             jPopupMenu1.show(evt.getComponent(), evt.getX(), evt.getY());
         }
     }//GEN-LAST:event_tblHoadonMouseReleased
-
+ NhanVien nv = Auth.user;
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-     NhanVien nv=new NhanVien();
-        if(nv.isVaiTro()==false){
-             int index=tblHoadon.getSelectedRow();
+       
+        if (nv.isVaiTro()) {
+           
+            int index = tblHoadon.getSelectedRow();
             int hoi = JOptionPane.showConfirmDialog(this, "Bạn có muốn hủy đơn này?", "Hủy Đơn", JOptionPane.YES_NO_OPTION);
             if (hoi == JOptionPane.YES_OPTION) {
-                sv.huydon((int) tblHoadon.getValueAt(index, 0));
+                String mail = JOptionPane.showInputDialog("Nhập Lý Do Hủy");
+           if(mail.isEmpty()){
+                JOptionPane.showMessageDialog(null, "vui lòng nhập Lý Do Hủy!");
+                return;
             }
-        
+           
+                sv.huydon1((int) tblHoadon.getValueAt(index, 0),nv.getTenNV(),mail);
+            }
+
+        }
+        if(nv.isVaiTro()==false){
+            JOptionPane.showMessageDialog(jDateChooser1, "Chỉ Quản Lý Mới Được Dùng Chức Năng Này");
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void tblhuydonMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblhuydonMouseReleased
-            int r = tblhuydon.rowAtPoint(evt.getPoint());
+        int r = tblhuydon.rowAtPoint(evt.getPoint());
         if (r >= 0 && r < tblhuydon.getRowCount()) {
             tblhuydon.setRowSelectionInterval(r, r);
         } else {
             tblhuydon.clearSelection();
         }
- 
+
         int rowindex = tblhuydon.getSelectedRow();
-        if (rowindex < 0)
+        if (rowindex < 0) {
             return;
+        }
 //        Hoadon hoadon = DAOHOADON.selectById(Integer.parseInt(tblHoadon.getValueAt(rowindex, 0).toString()));
 //        if (hoadon.getSDT() == null) {
 //            mnTachDon.setEnabled(true);
@@ -407,27 +467,49 @@ Hoadon hd=new Hoadon();
 //            mnGopDon.setEnabled(false);
 //            mnSuaThongtinkhach.setEnabled(true);
 //        }
-        if (evt.isPopupTrigger() && evt.getComponent() instanceof JTable ) {   
+        if (evt.isPopupTrigger() && evt.getComponent() instanceof JTable) {
             jPopupMenu2.show(evt.getComponent(), evt.getX(), evt.getY());
         }
     }//GEN-LAST:event_tblhuydonMouseReleased
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        NhanVien nv=new NhanVien();
-        if(nv.isVaiTro()==false){
-             int index=tblhuydon.getSelectedRow();
+        
+        if (nv.isVaiTro() ) {
+            int index = tblhuydon.getSelectedRow();
             int hoi = JOptionPane.showConfirmDialog(this, "Bạn có muốn hoàn tác hủy đơn này?", "Hoàn Tác Hủy Đơn", JOptionPane.YES_NO_OPTION);
             if (hoi == JOptionPane.YES_OPTION) {
                 sv.hoantacdon((int) tblhuydon.getValueAt(index, 0));
             }
-        
+
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void cbotrangthaiItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbotrangthaiItemStateChanged
+        if (cbotrangthai.getSelectedIndex() == 2) {
+            sv.filltotablehoadon();
+            sv.filltotablehoadonhuy();
+        }
+        if (cbotrangthai.getSelectedIndex() == 1) {
+            sv.filltotablehoadon_chuathanhtoan();
+            sv.filltotablehoadonhuy_chuathanhtoan();
+        }
+        if (cbotrangthai.getSelectedIndex() == 0) {
+            sv.filltotablehoadon_dathanhtoan();
+            sv.filltotablehoadonhuy_dathanhtoan();
+        }
+    }//GEN-LAST:event_cbotrangthaiItemStateChanged
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+      int index=tblhuydon.getSelectedRow();
+      
+        JOptionPane.showMessageDialog(jDateChooser1,tblhuydon.getValueAt(index, 7));
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnTim;
     private javax.swing.JButton btn_lammoi;
+    private javax.swing.JComboBox<String> cbotrangthai;
     public static com.toedter.calendar.JDateChooser jDateChooser1;
     public static com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
@@ -436,6 +518,7 @@ Hoadon hd=new Hoadon();
     private javax.swing.JLabel jLabel4;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -452,5 +535,13 @@ Hoadon hd=new Hoadon();
     private void init() {
         sv.filltotablehoadon();
         sv.filltotablehoadonhuy();
+    }
+
+    private void fillcombo() {
+        String[] a = {"Đã Thanh Toán", "Chưa Thanh Toán", "Tất Cả"};
+        DefaultComboBoxModel modelcb = (DefaultComboBoxModel) cbotrangthai.getModel();
+        for (int i = 0; i < a.length; i++) {
+            modelcb.addElement(a[i]);
+        }
     }
 }

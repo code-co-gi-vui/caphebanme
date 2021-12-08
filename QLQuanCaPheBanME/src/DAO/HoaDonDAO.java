@@ -8,6 +8,7 @@ package DAO;
 import Entity.Hoadon;
 import JDBCHelper.jdbcHelper;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 public class HoaDonDAO implements InterfaceHoadon{
     String INSERT_SQL = "INSERT dbo.HoaDon VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
     String UPDATE_SQL_TrangThai = "UPDATE dbo.HoaDon SET Trangthai = ? WHERE ID_Hoadon = ?";
+    String UPDATE_SQL_TrangThai1 = " UPDATE dbo.HoaDon SET Trangthai =? , Lydohuy=' Ten NV: '+?+'; Noi Dung: '+? +'; Thoi Gian: '+? WHERE ID_Hoadon = ? ";
     String UPDATE_SQL_khachhang = "UPDATE dbo.HoaDon SET SDT = ?,Ten = ?,tenShip =?,diaChi =? WHERE ID_Hoadon = ?";
     String UPDATE_SQL_TrangThaiTT = "UPDATE dbo.HoaDon SET TTThanhtoan = ? WHERE ID_Hoadon = ?";
     String UPDATE_SQL_ThanhTien = "UPDATE dbo.HoaDon SET Thanhtien = ? WHERE ID_Hoadon = ?";
@@ -30,15 +32,27 @@ public class HoaDonDAO implements InterfaceHoadon{
     String SELECT_ALL_SQL_HD_CTT = "SELECT * FROM dbo.HoaDon where Trangthai = 1 AND TTThanhtoan = 0";
     String SELECT_BY_ID_SQL = "SELECT * FROM dbo.HoaDon WHERE ID_Hoadon = ?";
       String SELECT_ALL_SQL_trangthai1 = "SELECT * FROM dbo.HoaDon where Trangthai = 1";
+      String SELECT_ALL_SQL_trangthai1_chuathanhtoan = "SELECT * FROM dbo.HoaDon where Trangthai = 1 AND TTThanhtoan = 0";
+       String SELECT_ALL_SQL_trangthai1_dathanhtoan = "SELECT * FROM dbo.HoaDon where Trangthai = 1 AND TTThanhtoan = 1";
     String SELECT_ALL_SQL_trangthai0 = "SELECT * FROM dbo.HoaDon where Trangthai = 0";
+    String SELECT_ALL_SQL_trangthai0_chuathanhtoan = "SELECT * FROM dbo.HoaDon where Trangthai = 0 AND TTThanhtoan = 0";
+    String SELECT_ALL_SQL_trangthai0_dathanhtoan = "SELECT * FROM dbo.HoaDon where Trangthai = 0 AND TTThanhtoan = 1";
     String select_all_sql_find_HOATDOng ="select *from HoaDon where Ngaytao between ? and ? and Trangthai = 1";
-        String select_all_sql_find_KoHoatDong ="select *from HoaDon where Ngaytao between ? and ? and Trangthai = 0";
+     String select_all_sql_find_HOATDOng_chuathanhtoan ="select *from HoaDon where Ngaytao between ? and ? and Trangthai = 1 and TTThanhtoan = 0";
+       String select_all_sql_find_HOATDOng_dathanhtoan ="select *from HoaDon where Ngaytao between ? and ? and Trangthai = 1 and TTThanhtoan = 1";
+     String select_all_sql_find_KoHoatDong ="select *from HoaDon where Ngaytao between ? and ? and Trangthai = 0";
+        String select_all_sql_find_KoHoatDong_dathanhtoan ="select *from HoaDon where Ngaytao between ? and ? and Trangthai = 0 AND TTThanhtoan = 1";
+         String select_all_sql_find_KoHoatDong_chuathanhtoan ="select *from HoaDon where Ngaytao between ? and ? and Trangthai = 0 AND TTThanhtoan = 0";
         String select_all_sql_find_HOATDOng_keyword_IDHoaDon ="select *from HoaDon where Ngaytao between ? and ? and Trangthai = 1";
         String select_all_sql_find_KoHoatDong_keyword_IDHoaDon ="select *from HoaDon where Ngaytao between ? and ? and Trangthai = 0";
         String select_all_sql_find_KoHoatDong_keyword_IDMaNV="SELECT * FROM HoaDon WHERE ID_Nhanvien LIKE ? and Trangthai = 0 ";
         String select_all_sql_find_HoatDong_keyword_IDMaNV="SELECT * FROM HoaDon WHERE ID_Nhanvien LIKE ? and Trangthai = 1 ";
         String select_all_sql_find_KoHoatDong_1ngay="select *from HoaDon where Ngaytao =?  and Trangthai = 1 ";
+          String select_all_sql_find_KoHoatDong_1ngay_dathanhtoan="select *from HoaDon where Ngaytao =?  and Trangthai = 1 AND TTThanhtoan = 1";
+     String   select_all_sql_find_KoHoatDong_1ngay_chuathanhtoan ="select *from HoaDon where Ngaytao =?  and Trangthai = 1 AND TTThanhtoan = 0";
         String select_all_sql_find_HoatDong_1ngay="select *from HoaDon where Ngaytao =?  and Trangthai = 0";
+        String select_all_sql_find_HoatDong_1ngay_dathanhtoan="select *from HoaDon where Ngaytao =?  and Trangthai = 0 AND TTThanhtoan = 1";
+        String select_all_sql_find_HoatDong_1ngay_chuathanhtoan="select *from HoaDon where Ngaytao =?  and Trangthai = 0 AND TTThanhtoan = 0";
     
     @Override
     public void insert(Hoadon Entity) {
@@ -111,7 +125,10 @@ public class HoaDonDAO implements InterfaceHoadon{
     public void updateTrangThai(Hoadon Entity) {
         JDBCHelper.jdbcHelper.update(UPDATE_SQL_TrangThai, Entity.isTrangThai(),Entity.getIdHoaDon());
     }
-
+ SimpleDateFormat sm=new SimpleDateFormat("yyyy.MM.dd");
+    public void updateTrangThai1(Hoadon Entity,String tennv,String noidung) {
+        JDBCHelper.jdbcHelper.update(UPDATE_SQL_TrangThai1, Entity.isTrangThai(),tennv,noidung,sm.format(new Date().getTime()),Entity.getIdHoaDon());
+    }
     @Override
     public void updateThanhtien(Hoadon Entity) {
         JDBCHelper.jdbcHelper.update(UPDATE_SQL_ThanhTien, Entity.getThanhTien(),Entity.getIdHoaDon());
@@ -131,15 +148,39 @@ public class HoaDonDAO implements InterfaceHoadon{
     public List<Hoadon> selectAll_trangthai1() {
        return selectBySql(SELECT_ALL_SQL_trangthai1);
     }
-
+      public List<Hoadon> selectAll_trangthai1_chuathanhtoan() {
+       return selectBySql(SELECT_ALL_SQL_trangthai1_chuathanhtoan);
+    }
+ public List<Hoadon> selectAll_trangthai1_dathanhtoan() {
+       return selectBySql(SELECT_ALL_SQL_trangthai1_dathanhtoan);
+    }
     @Override
     public List<Hoadon> selectAll_trangthai0() {
          return selectBySql(SELECT_ALL_SQL_trangthai0);
     }
-
+     public List<Hoadon> selectAll_trangthai0_chuathanhtoan() {
+         return selectBySql(SELECT_ALL_SQL_trangthai0_chuathanhtoan);
+    }
+ public List<Hoadon> selectAll_trangthai0_dathanhtoan() {
+         return selectBySql(SELECT_ALL_SQL_trangthai0_dathanhtoan);
+    }
     @Override
     public List<Hoadon> selectAll_SQL_Find_HoatDong(Date a, Date b) {
          List<Hoadon> list = this.selectBySql(select_all_sql_find_HOATDOng, a,b);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list;
+    }
+    public List<Hoadon> selectAll_SQL_Find_HoatDong_chuathanhtoan(Date a, Date b) {
+         List<Hoadon> list = this.selectBySql(select_all_sql_find_HOATDOng_chuathanhtoan, a,b);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list;
+    }
+     public List<Hoadon> selectAll_SQL_Find_HoatDong_dathanhtoan(Date a, Date b) {
+         List<Hoadon> list = this.selectBySql(select_all_sql_find_HOATDOng_dathanhtoan, a,b);
         if (list.isEmpty()) {
             return null;
         }
@@ -176,6 +217,20 @@ public class HoaDonDAO implements InterfaceHoadon{
         }
         return list;
     }
+    public List<Hoadon> selectAll_SQL_Find_KoHoatDong_dathanhtoan(Date a, Date b) {
+      List<Hoadon> list = this.selectBySql(select_all_sql_find_KoHoatDong_dathanhtoan, a,b);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list;
+    }
+    public List<Hoadon> selectAll_SQL_Find_KoHoatDong_chuathanhtoan(Date a, Date b) {
+      List<Hoadon> list = this.selectBySql(select_all_sql_find_KoHoatDong_chuathanhtoan, a,b);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list;
+    }
 
     @Override
     public List<Hoadon> selectAll_SQL_Find_HoatDong_1ngay(Date a) {
@@ -185,10 +240,38 @@ public class HoaDonDAO implements InterfaceHoadon{
         }
         return list;
     }
+    public List<Hoadon> selectAll_SQL_Find_HoatDong_1ngay_dathanhtoan(Date a) {
+        List<Hoadon> list = this.selectBySql(select_all_sql_find_HoatDong_1ngay_dathanhtoan, a);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list;
+    }
+     public List<Hoadon> selectAll_SQL_Find_HoatDong_1ngay_chuathanhtoan(Date a) {
+        List<Hoadon> list = this.selectBySql(select_all_sql_find_HoatDong_1ngay_chuathanhtoan, a);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list;
+    }
 
     @Override
     public List<Hoadon> selectAll_SQL_Find_KoHoatDong_1ngay(Date a) {
         List<Hoadon> list = this.selectBySql(select_all_sql_find_KoHoatDong_1ngay, a);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list;
+    }
+    public List<Hoadon> selectAll_SQL_Find_KoHoatDong_1ngay_dathanhtoan(Date a) {
+        List<Hoadon> list = this.selectBySql(select_all_sql_find_KoHoatDong_1ngay_dathanhtoan, a);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list;
+    }
+    public List<Hoadon> selectAll_SQL_Find_KoHoatDong_1ngay_chuathanhtoan(Date a) {
+        List<Hoadon> list = this.selectBySql(select_all_sql_find_KoHoatDong_1ngay_chuathanhtoan, a);
         if (list.isEmpty()) {
             return null;
         }

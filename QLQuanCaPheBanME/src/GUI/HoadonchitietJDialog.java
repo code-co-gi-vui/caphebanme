@@ -53,11 +53,11 @@ SerHoaDonChiTiet sv=new SerHoaDonChiTiet();
 
             },
             new String [] {
-                "ID_HoaDon", "ID_SanPham", "Soluong", "Gia", "TongGia", "TTthanhtoan", "Lý do hủy"
+                "Mã Hóa Đơn", "Mã Sản Phẩm", "Số Lượng", "Giá", "Tổng Giá", "Sản Phẩm Hủy", "Lý do hủy"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, true
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {

@@ -30,7 +30,7 @@ public class SerHoaDonChiTiet {
                     hd.getSoluong(),
                     hd.getGia(),
                     hd.getTongGia(),
-                    hd.isTrangThai() ?"Lanh ăn cứt" : "Lanh Rất ăn cứt",
+                    hd.isTrangThai() ?"" : "Hủy",
                         hd.getLyDoHuy()
                     
                 });

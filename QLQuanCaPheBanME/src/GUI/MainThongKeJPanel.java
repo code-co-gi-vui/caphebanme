@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import org.jfree.data.category.DefaultCategoryDataset;
 import DAO.thongkedao;
+import JDBCHelper.Auth;
 import JDBCHelper.Printthongke;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.pdf.BaseFont;
@@ -45,7 +46,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class MainThongKeJPanel extends javax.swing.JPanel {
   DefaultTableModel dtm;
     thongkedao sv = new thongkedao();
-    NhanVien nv=new NhanVien();
+   NhanVien nv=Auth.user;
 
     /**
      * Creates new form MainThongKeJPanel
@@ -440,7 +441,7 @@ public class MainThongKeJPanel extends javax.swing.JPanel {
        }
          Date a = jDateNgaybd.getDate();
         Date b = jDatengayKt.getDate();
-        if(a.getTime()>=b.getTime()){
+        if(a.getTime()>b.getTime() || a==b){
            JOptionPane.showMessageDialog(btnTimkiem, "Ngày trước phải nhỏ hơn ngày sau");
               return;
           
@@ -458,9 +459,11 @@ public class MainThongKeJPanel extends javax.swing.JPanel {
         Bieudo bd=new Bieudo();
         bd.setVisible(true);
     }//GEN-LAST:event_btnTimkiem2ActionPerformed
-
+NhanVien nv1 = Auth.user;
     private void btnTimkiem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimkiem3ActionPerformed
-        if(cboDate.getSelectedIndex()==0){
+         int hoi = JOptionPane.showConfirmDialog(this, "Bạn có muốn gửi mail?", "Gửi Mail Báo Cáo", JOptionPane.YES_NO_OPTION);
+            if (hoi == JOptionPane.YES_OPTION) {
+             if(cboDate.getSelectedIndex()==0){
             try {
                 sendmailngay("Hàng Ngày","Hôm Nay");
             } catch (MessagingException ex) {
@@ -481,6 +484,8 @@ public class MainThongKeJPanel extends javax.swing.JPanel {
                 Logger.getLogger(MainThongKeJPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+            }
+        
     }//GEN-LAST:event_btnTimkiem3ActionPerformed
 
     public void sendmailngay(String a,String b) throws MessagingException {
@@ -504,6 +509,16 @@ public class MainThongKeJPanel extends javax.swing.JPanel {
        
             
             String mail = JOptionPane.showInputDialog("Nhập mail gửi đến?");
+            if(mail.isEmpty()){
+                JOptionPane.showMessageDialog(btnTimkiem, "vui lòng nhập Mail!");
+                return;
+            }
+            String checkEmail = "\\w+@\\w+(\\.\\w+){1,2}";
+            if (!mail.matches(checkEmail)) {
+                JOptionPane.showMessageDialog(this, "Email không hợp lệ");
+               
+                return;
+            }
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("phong9zx2@gmail.com"));
             message.setRecipients(
@@ -513,16 +528,19 @@ public class MainThongKeJPanel extends javax.swing.JPanel {
             //thaocnph13274@fpt.edu.vn
             message.setSubject("Báo Cáo Thống Kê "+a);//a=hàng ngày
             String Htmlcode = "<h3 >Kính Gửi Sếp !  </h3>";
+            String Htmlcode10 = "<h3 >Tên Nhân Viên :  </h3>"+nv.getTenNV()+"";
             String Htmlcode1 = "<h4>Tình hình doanh thu, số lượng sản phẩm bán được, số lượng đơn hàng "
                     + "bán được "+b+" như sau : </h4>";//b=hôm nay
+            
             String Htmlcode2 = "<h3 >Ngày:  </h3>"+new Date()+"";
+            
             String Htmlcode3 = " <h3>Doanh Thu: </h3>";
             String Htmlcode4 = " Tổng Doanh Thu "+b+": "+lblDoanhthu.getText()+"<br>";
             String Htmlcode5 = " <h3>Đơn Bán: </h3>";
             String Htmlcode6 = " Tổng Đơn Bán "+b+": "+lblDoanhthu1.getText()+"<br>";
             String Htmlcode7 = "<h3>Sản Phẩm Bán: </h3>";
             String Htmlcode8 = " Tổng Sản Phẩm Bán "+b+": "+lbltongsanpham.getText()+"<br>";
-            message.setContent(Htmlcode+Htmlcode1+Htmlcode2+Htmlcode3+Htmlcode4+Htmlcode5+Htmlcode6+Htmlcode7+Htmlcode8, "text/html;charset=UTF-8");
+            message.setContent(Htmlcode+Htmlcode10+Htmlcode1+Htmlcode2+Htmlcode3+Htmlcode4+Htmlcode5+Htmlcode6+Htmlcode7+Htmlcode8, "text/html;charset=UTF-8");
             
             Transport.send(message);
             JOptionPane.showMessageDialog(this, "Mail đã được gửi tới quản lý!");
@@ -533,7 +551,9 @@ public class MainThongKeJPanel extends javax.swing.JPanel {
     private void btnTimkiem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimkiem4ActionPerformed
 //       int index=tblsoluong.getSelectedRow();
 //        new chon((DefaultTableModel) tblsoluong.getModel(),(DefaultTableModel) tblhuydon.getModel()).setVisible(true);
-        if(cboDate.getSelectedIndex()==0){
+ int hoi = JOptionPane.showConfirmDialog(this, "Bạn có muốn in PDF?", "In Thống Kê", JOptionPane.YES_NO_OPTION);
+            if (hoi == JOptionPane.YES_OPTION) {
+                 if(cboDate.getSelectedIndex()==0){
             new Printthongke().xuatpdf_ngay((DefaultTableModel) tblsoluong.getModel(),(DefaultTableModel) tblhuydon.getModel());
         }
         if(cboDate.getSelectedIndex()==1){
@@ -542,10 +562,25 @@ public class MainThongKeJPanel extends javax.swing.JPanel {
          if(cboDate.getSelectedIndex()==2){
             new Printthongke().xuatpdf_nam((DefaultTableModel) tblsoluong.getModel(),(DefaultTableModel) tblhuydon.getModel());
         }
+            }
+       
     }//GEN-LAST:event_btnTimkiem4ActionPerformed
 
     private void btnxuatexcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnxuatexcelActionPerformed
-        Thao_Ong_Vang();
+        int hoi = JOptionPane.showConfirmDialog(this, "Bạn có muốn xuất thống kê Excel?", "Xuất Excel", JOptionPane.YES_NO_OPTION);
+            if (hoi == JOptionPane.YES_OPTION) {
+                if(cboDate.getSelectedIndex()==0){
+           Thao_Ong_Vang("Hôm Nay");
+        }
+        if(cboDate.getSelectedIndex()==1){
+            Thao_Ong_Vang("Tháng Này");
+        }
+         if(cboDate.getSelectedIndex()==2){
+           Thao_Ong_Vang("Năm Này");
+        }
+            }
+        
+    
     }//GEN-LAST:event_btnxuatexcelActionPerformed
 
 
@@ -821,7 +856,7 @@ public class MainThongKeJPanel extends javax.swing.JPanel {
         }
     }
 
-    private void Thao_Ong_Vang() {
+    private void Thao_Ong_Vang(String a) {
         dtm = (DefaultTableModel) tblsoluong.getModel();
         JFileChooser fchoChooser = new JFileChooser();
         int result = fchoChooser.showSaveDialog(null);
@@ -835,7 +870,7 @@ public class MainThongKeJPanel extends javax.swing.JPanel {
                 FileOutputStream file = new FileOutputStream(newFile.getAbsoluteFile().getPath());
                 XSSFWorkbook wb = new XSSFWorkbook();
                 //TK điểm
-                XSSFSheet Diemsheep = wb.createSheet("TK_Doanh Thu Sản Phẩm");
+                XSSFSheet Diemsheep = wb.createSheet("TK_Doanh Thu SP Theo "+a);
                 XSSFRow row = Diemsheep.createRow((short) 0);
                 XSSFCell h;
                 for (int i = 0; i < dtm.getColumnCount(); i++) {
@@ -857,7 +892,7 @@ public class MainThongKeJPanel extends javax.swing.JPanel {
 
                 
                 dtm = (DefaultTableModel) tblhuydon.getModel();
-                XSSFSheet NguoiHocsheep = wb.createSheet("TK_Đơn Hủy Theo Nhân Viên");
+                XSSFSheet NguoiHocsheep = wb.createSheet("TK_Đơn Hủy Theo NV Theo "+a);
                 row = NguoiHocsheep.createRow((short) 0);
                 for (int i = 0; i < dtm.getColumnCount(); i++) {
                     h = row.createCell((short) i);
