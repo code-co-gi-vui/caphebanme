@@ -139,4 +139,9 @@ public class NhanVienDAO implements InterfaceNhanVien {
         }
         return null;
     }
+    //
+       public void  updatePass(String pass, String idnv){
+         String sql  = "update NHANVIEN SET Pass = ? where ID_NHANVIEN = ?";
+         jdbcHelper.update(sql,pass,idnv);
+     }
 }

@@ -42,7 +42,8 @@ public class SanPhamDao implements interfaceSanPham {
     String NAME_DVSP = "SELECT * FROM dbo.DonViSanPham WHERE ID_DonviSP = ?";
 
     String SElECT_SQL_IDSP = "SELECT * FROM dbo.SanPham WHERE Trangthai = 1 AND ID_Sanpham = ?";
-
+    
+    
     @Override
     public void insert(SanPham sp) {
 
@@ -155,4 +156,14 @@ public class SanPhamDao implements interfaceSanPham {
         String sql = "select * from SanPham where TENSP   = ?";
         return selectBysql(sql, name).get(0).getId_sp();
     }
+    
+    public SanPham selectTen(String name) {
+        String sql = "select * from SanPham where TenSP = ?";
+        List<SanPham> list = selectBysql(sql, name);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+   
 }

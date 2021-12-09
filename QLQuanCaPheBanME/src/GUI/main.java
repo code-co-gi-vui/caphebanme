@@ -23,10 +23,10 @@ public class main extends javax.swing.JFrame {
     public main() {
         initComponents();
         setLocationRelativeTo(null);
-        new DangnhapJDialog(this, true).setVisible(true);
+//        new DangnhapJDialog(this, true).setVisible(true);
         setExtendedState(this.MAXIMIZED_BOTH);
         setColor(lblTrangchu);
-        showPanel(new TrangchuJPanel());
+        showPanel(new QuanLySanPhamJPanel());
     }
 
     /**

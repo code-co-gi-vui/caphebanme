@@ -202,3 +202,5 @@ BEGIN
 	DELETE FROM dbo.BanChiTiet WHERE ID_Hoadon = @mahd
 	DELETE FROM dbo.HoaDon WHERE ID_Hoadon = @mahd
 END 
+
+select * from GiamGia

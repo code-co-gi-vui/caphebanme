@@ -176,11 +176,11 @@ public class GiamGiaSanPhamJPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Sự kiện", "Tên nhân viên", "Ngày bắt đầu", "Ngày kết thúc", "Hoạt động"
+                "Mã nhân viên", "ID", "Sự kiện", "Tên nhân viên", "Ngày bắt đầu", "Ngày kết thúc", "Hoạt động"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -198,8 +198,9 @@ public class GiamGiaSanPhamJPanel extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(tblSanphamgiamgia);
         if (tblSanphamgiamgia.getColumnModel().getColumnCount() > 0) {
+            tblSanphamgiamgia.getColumnModel().getColumn(0).setMinWidth(0);
             tblSanphamgiamgia.getColumnModel().getColumn(0).setPreferredWidth(40);
-            tblSanphamgiamgia.getColumnModel().getColumn(0).setMaxWidth(60);
+            tblSanphamgiamgia.getColumnModel().getColumn(0).setMaxWidth(0);
             tblSanphamgiamgia.getColumnModel().getColumn(1).setPreferredWidth(150);
             tblSanphamgiamgia.getColumnModel().getColumn(1).setMaxWidth(300);
         }
@@ -454,7 +455,7 @@ public class GiamGiaSanPhamJPanel extends javax.swing.JPanel {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
-        if (check() && check2() && checkNull()) {
+        if (checkNull() && check() && check2()) {
             insert();
         }
     }//GEN-LAST:event_btnThemActionPerformed
@@ -467,6 +468,7 @@ public class GiamGiaSanPhamJPanel extends javax.swing.JPanel {
             ngaybd = txtdate1.getDate();
             new ThemSanPhamGiaJDialog(null, true, maGiamGia, ngaybd).setVisible(true);
             filltableChitiet();
+            System.out.println("mã sự kiện giảm giá : " + tblSanphamgiamgia.getValueAt(row, 0).toString());
         } else {
             try {
                 filltableChitiet();
@@ -614,24 +616,26 @@ public class GiamGiaSanPhamJPanel extends javax.swing.JPanel {
     private void fillToTableSPGD() {
         model.setRowCount(0);
         try {
-
             List<giamGia> list = daoGG.selectAll();
+            int a = 0;
             for (giamGia g : list) {
 
                 switch (cbohansukien.getSelectedItem().toString()) {
                     case "còn hạn":
                         if (checkTGian(g.getNgayBD(), g.getNgayKT()) == true) {
                             String ten = daonv.selectById(g.getIdnhanvien()).getTenNV();
-                            model.addRow(new Object[]{g.getId_GiamGia(), g.getTenSK(),
+                            model.addRow(new Object[]{g.getId_GiamGia(), a += 1, g.getTenSK(),
                                 ten, g.getNgayBD(), g.getNgayKT(),
                                 checkTGian(g.getNgayBD(), g.getNgayKT()) ? "còn hạn" : "hết hạn"});
                             lbltenkiendienra.setText("Sự kiện còn thời gian");
+
                         }
+
                         break;
                     case "hết hạn":
                         if (checkTGian(g.getNgayBD(), g.getNgayKT()) == false) {
                             String ten = daonv.selectById(g.getIdnhanvien()).getTenNV();
-                            model.addRow(new Object[]{g.getId_GiamGia(), g.getTenSK(),
+                            model.addRow(new Object[]{g.getId_GiamGia(), a += 1, g.getTenSK(),
                                 ten, g.getNgayBD(), g.getNgayKT(),
                                 checkTGian(g.getNgayBD(), g.getNgayKT()) ? "còn hạn" : "hết hạn"});
                             lbltenkiendienra.setText("Sự kiện  thời gian");
@@ -714,8 +718,8 @@ public class GiamGiaSanPhamJPanel extends javax.swing.JPanel {
 
     private void setform(giamGia gg) {
 
-        txtSukien.setText(tblSanphamgiamgia.getValueAt(row, 1).toString());
-        lblTenNhanVien.setText(tblSanphamgiamgia.getValueAt(row, 2).toString());
+        txtSukien.setText(tblSanphamgiamgia.getValueAt(row, 2).toString());
+        lblTenNhanVien.setText(tblSanphamgiamgia.getValueAt(row, 3).toString());
 
         txtdate1.setDate(gg.getNgayBD());
 //        System.out.println(gg.getNgayBD());
@@ -905,19 +909,21 @@ public class GiamGiaSanPhamJPanel extends javax.swing.JPanel {
     }
 
     private boolean check2() {
-       
+
         if (daoGG.selectByIdSK(txtSukien.getText()) == null) {
             return true;
-        }
-         else {
+        } else {
             MsgBox.alert(this, "Tên sự kiện không được trùng");
             return false;
         }
     }
 
     private boolean checkNull() {
-        if (txtSukien.getText().isEmpty() == true) {
-            MsgBox.alert(this, "Không được để trống tên sự kiện!!!");
+        if (txtdate1.getDate() == null) {
+            MsgBox.alert(this, "Ngày của sự kiện không được để trống");
+            return false;
+        } else if (txtdate2.getDate() == null) {
+            MsgBox.alert(this, "Ngày của sự kiện không được để trống");
             return false;
         }
         return true;
