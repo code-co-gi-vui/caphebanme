@@ -101,11 +101,13 @@ public class thongkedao {
     String sql_find_sanpham = "	select  TenSP,sum(h.Soluong)  as N'Số Lượng' ,sum(h.TongGia) as N'Tổng Tiền1' from HoaDon d join HoaDonChiTiet h \n" +
 "            on h.ID_HoaDon=d.ID_Hoadon  join SanPham s on h.ID_SanPham=s.ID_Sanpham where  d.Trangthai=1 and  d.TTThanhtoan=1 and  h.TTthanhtoan=1 and Ngaytao between ? and ?\n" +
 "            GROUP BY TenSP";
-    String sql_find_donhuy = "select ID_Nhanvien,count(ID_Nhanvien) as soluong from HoaDon where Trangthai=0 and Ngaytao between ? and ?\n"
-            + "            GROUP BY ID_Nhanvien";
+    String sql_find_donhuy = " select TenNV,count(HoaDon.ID_Nhanvien) as soluong from HoaDon \n" +
+"	join NhanVien on HoaDon.ID_Nhanvien=NhanVien.ID_Nhanvien \n" +
+"	where HoaDon.Trangthai=0 and Ngaytao between ? and ?\n" +
+"                  GROUP BY TenNV";
 
-    String sql_find_sphuy = "select sum(Soluongsanphamhuy) as soluong from HoaDon where ID_Nhanvien=? and Ngaytao between ? and ?\n"
-            + "GROUP BY ID_Nhanvien";
+    String sql_find_sphuy = "select sum(Soluongsanphamhuy) as soluong from HoaDon join NhanVien on HoaDon.ID_Nhanvien=NhanVien.ID_Nhanvien  where TenNV=? and Ngaytao between ? and ?\n" +
+"            GROUP BY TenNV";
  String sql_thongke_hoadonban_thang="select Ngaytao,COUNT(*) as soluong from HoaDon where Trangthai=1 and TTThanhtoan=1 and MONTH(Ngaytao)=MONTH(GETDATE())\n" +
 "\n" +
 "GROUP BY Ngaytao";
@@ -513,7 +515,7 @@ SimpleDateFormat sm=new SimpleDateFormat("yyyy.MM.dd");
 
     public List<Object[]> selectdaonhthu_find_table_donhuy(Date a, Date b) {
 SimpleDateFormat sm=new SimpleDateFormat("yyyy.MM.dd");
-        String[] cols = {"ID_Nhanvien", "soluong"};
+        String[] cols = {"TenNV", "soluong"};
         return this.getListOfArray(sql_find_donhuy, cols,sm.format(a),sm.format(b));
     }
     public int selectdaonhthu_find_table_sphuy(String mnv,Date a, Date b) {

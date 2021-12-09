@@ -204,3 +204,17 @@ BEGIN
 END 
 
 select * from GiamGia
+
+select TenNV,count(HoaDon.ID_Nhanvien) as soluong from HoaDon 
+	join NhanVien on HoaDon.ID_Nhanvien=NhanVien.ID_Nhanvien 
+	where HoaDon.Trangthai=0 and year(Ngaytao)=year(getdate())
+                     GROUP BY TenNV
+
+
+					 select TenNV,count(HoaDon.ID_Nhanvien) as soluong from HoaDon 
+	join NhanVien on HoaDon.ID_Nhanvien=NhanVien.ID_Nhanvien 
+	where HoaDon.Trangthai=0 and Ngaytao between ? and ?
+                  GROUP BY TenNV
+
+				  select sum(Soluongsanphamhuy) as soluong from HoaDon join NhanVien on HoaDon.ID_Nhanvien=NhanVien.ID_Nhanvien  where TenNV=? and Ngaytao between ? and ?
+            GROUP BY TenNV
