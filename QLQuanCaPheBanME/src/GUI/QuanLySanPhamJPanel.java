@@ -22,7 +22,7 @@ import BUL.SerSanPham;
 import JDBCHelper.MsgBox;
 import JDBCHelper.XImage;
 import JDBCHelper.XImages;
-import com.sun.xml.internal.ws.model.ParameterImpl;
+
 import java.awt.Color;
 import java.awt.Frame;
 import java.io.File;

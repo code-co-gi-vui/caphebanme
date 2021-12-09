@@ -14,6 +14,7 @@ import JDBCHelper.jdbcHelper;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -75,21 +76,31 @@ public class thongkedao {
             + "\n"
             + "where year(d.Ngaytao)=? and h.TTthanhtoan=1\n"
             + "GROUP BY TenSP";
-    String sql_donhuy_ngay = "select ID_Nhanvien,count(ID_Nhanvien) as soluong from HoaDon where Trangthai=0 and day(Ngaytao)=day(getdate())\n"
-            + "GROUP BY ID_Nhanvien";
-    String sql_donhuy_thang = "select ID_Nhanvien,count(ID_Nhanvien) as soluong from HoaDon where Trangthai=0 and month(Ngaytao)=month(getdate())\n"
-            + "GROUP BY ID_Nhanvien";
-    String sql_donhuy_nam = "select ID_Nhanvien,count(ID_Nhanvien) as soluong from HoaDon where Trangthai=0 and year(Ngaytao)=year(getdate())\n"
-            + "GROUP BY ID_Nhanvien";
-    String sql_sphuyNgay = "select sum(Soluongsanphamhuy) as soluong from HoaDon where ID_Nhanvien=? and day(Ngaytao)=day(getdate())\n"
-            + "GROUP BY ID_Nhanvien";
-    String sql_sphuyThang = "select sum(Soluongsanphamhuy) as soluong from HoaDon where ID_Nhanvien=? and month(Ngaytao)=month(getdate())\n"
-            + "GROUP BY ID_Nhanvien";
-    String sql_sphuynam = "select sum(Soluongsanphamhuy) as soluong from HoaDon where ID_Nhanvien=? and year(Ngaytao)=year(getdate())\n"
-            + "GROUP BY ID_Nhanvien";
-    String sql_find_sanpham = "select  TenSP,COUNT(h.ID_SanPham) as N'Số Lượng',sum(d.Thanhtien) as N'Tổng Tiền1' from HoaDon d join HoaDonChiTiet h \n"
-            + "on h.ID_HoaDon=d.ID_Hoadon  join SanPham s on h.ID_SanPham=s.ID_Sanpham where  d.Trangthai=1 and Ngaytao between ? and ?\n"
-            + "GROUP BY TenSP";
+    String sql_donhuy_ngay = "select TenNV,count(HoaDon.ID_Nhanvien) as soluong from HoaDon \n" +
+"	join NhanVien on HoaDon.ID_Nhanvien=NhanVien.ID_Nhanvien \n" +
+"	where HoaDon.Trangthai=0 and day(Ngaytao)=day(getdate())\n" +
+"                     GROUP BY TenNV";
+    String sql_donhuy_thang = "select TenNV,count(HoaDon.ID_Nhanvien) as soluong from HoaDon \n" +
+"	join NhanVien on HoaDon.ID_Nhanvien=NhanVien.ID_Nhanvien \n" +
+"	where HoaDon.Trangthai=0 and month(Ngaytao)=month(getdate())\n" +
+"                     GROUP BY TenNV";
+    String sql_donhuy_nam = "select TenNV,count(HoaDon.ID_Nhanvien) as soluong from HoaDon \n" +
+"	join NhanVien on HoaDon.ID_Nhanvien=NhanVien.ID_Nhanvien \n" +
+"	where HoaDon.Trangthai=0 and year(Ngaytao)=year(getdate())\n" +
+"                     GROUP BY TenNV\n" +
+"					 ";
+    String sql_sphuyNgay = "select sum(Soluongsanphamhuy) as soluong from HoaDon join NhanVien on HoaDon.ID_Nhanvien=NhanVien.ID_Nhanvien\n" +
+"					  where TenNV=? and day(Ngaytao)=day(getdate())\n" +
+"            GROUP BY TenNV";
+    String sql_sphuyThang = "select sum(Soluongsanphamhuy) as soluong from HoaDon join NhanVien on HoaDon.ID_Nhanvien=NhanVien.ID_Nhanvien\n" +
+"					  where TenNV=? and month(Ngaytao)=month(getdate())\n" +
+"            GROUP BY TenNV";
+    String sql_sphuynam = " select sum(Soluongsanphamhuy) as soluong from HoaDon join NhanVien on HoaDon.ID_Nhanvien=NhanVien.ID_Nhanvien\n" +
+"					  where TenNV=? and year(Ngaytao)=year(getdate())\n" +
+"            GROUP BY TenNV";
+    String sql_find_sanpham = "	select  TenSP,sum(h.Soluong)  as N'Số Lượng' ,sum(h.TongGia) as N'Tổng Tiền1' from HoaDon d join HoaDonChiTiet h \n" +
+"            on h.ID_HoaDon=d.ID_Hoadon  join SanPham s on h.ID_SanPham=s.ID_Sanpham where  d.Trangthai=1 and  d.TTThanhtoan=1 and  h.TTthanhtoan=1 and Ngaytao between ? and ?\n" +
+"            GROUP BY TenSP";
     String sql_find_donhuy = "select ID_Nhanvien,count(ID_Nhanvien) as soluong from HoaDon where Trangthai=0 and Ngaytao between ? and ?\n"
             + "            GROUP BY ID_Nhanvien";
 
@@ -418,19 +429,19 @@ public class thongkedao {
 
     public List<Object[]> getdonhuyngay() {
 
-        String[] cols = {"ID_Nhanvien", "soluong"};
+        String[] cols = {"TenNV", "soluong"};
         return this.getListOfArray(sql_donhuy_ngay, cols);
     }
 
     public List<Object[]> getdonhuythang() {
 
-        String[] cols = {"ID_Nhanvien", "soluong"};
+        String[] cols = {"TenNV", "soluong"};
         return this.getListOfArray(sql_donhuy_thang, cols);
     }
 
     public List<Object[]> getdonhuynam() {
 
-        String[] cols = {"ID_Nhanvien", "soluong"};
+        String[] cols = {"TenNV", "soluong"};
         return this.getListOfArray(sql_donhuy_nam, cols);
     }
 
@@ -464,6 +475,7 @@ public class thongkedao {
         model1.setRowCount(0);
         Date a = MainThongKeJPanel.jDateNgaybd.getDate();
         Date b = MainThongKeJPanel.jDatengayKt.getDate();
+        
         try {
             if (a.getTime() > b.getTime()) {
                 JOptionPane.showMessageDialog(null, "Ngày bắt đầu phải nhỏ hơn ngày kết thúc");
@@ -473,6 +485,7 @@ public class thongkedao {
                 JOptionPane.showMessageDialog(null, "Ngày  không hợp lệ");
                 return;
             }
+            
             list = selectdaonhthu_find_table_sanpham(a, b);
             for (Object[] hd : list) {
                 model.addRow(hd);
@@ -493,20 +506,20 @@ public class thongkedao {
     }
 
     public List<Object[]> selectdaonhthu_find_table_sanpham(Date a, Date b) {
-
+SimpleDateFormat sm=new SimpleDateFormat("yyyy.MM.dd");
         String[] cols = {"TenSP", "Số Lượng", "Tổng Tiền1"};
-        return this.getListOfArray(sql_find_sanpham, cols, a, b);
+        return this.getListOfArray(sql_find_sanpham, cols,sm.format(a), sm.format(b));
     }
 
     public List<Object[]> selectdaonhthu_find_table_donhuy(Date a, Date b) {
-
+SimpleDateFormat sm=new SimpleDateFormat("yyyy.MM.dd");
         String[] cols = {"ID_Nhanvien", "soluong"};
-        return this.getListOfArray(sql_find_donhuy, cols, a, b);
+        return this.getListOfArray(sql_find_donhuy, cols,sm.format(a),sm.format(b));
     }
     public int selectdaonhthu_find_table_sphuy(String mnv,Date a, Date b) {
-
+SimpleDateFormat sm=new SimpleDateFormat("yyyy.MM.dd");
         String[] cols = {"soluong"};
-        List<Object[]> lst = this.getListOfArray(sql_find_sphuy, cols, mnv,a,b);
+        List<Object[]> lst = this.getListOfArray(sql_find_sphuy, cols, mnv,sm.format(a),sm.format(b));
         return (int) lst.get(0)[0];
     }
     
@@ -526,14 +539,14 @@ public class thongkedao {
         return this.getListOfArray_thongke_spban(sql_thongke_spban_thang, cols);
     }
      public List<ThongKespban> Chart1_sp_find(Date a,Date b) {
-
+SimpleDateFormat sm=new SimpleDateFormat("yyyy.MM.dd");
         String[] cols = {"TenSP", "soluong"};
-        return this.getListOfArray_thongke_spban(sql_thongke_spban_find, cols,a,b);
+        return this.getListOfArray_thongke_spban(sql_thongke_spban_find, cols,sm.format(a),sm.format(b));
     }
      public List<thongkedonban> Chart_hoadon_find(Date a,Date b) {
-
+SimpleDateFormat sm=new SimpleDateFormat("yyyy.MM.dd");
         String[] cols = {"Ngaytao", "soluong"};
-        return this.getListOfArray_thongke_donban(sql_thongke_hoadonban_find, cols,a,b);
+        return this.getListOfArray_thongke_donban(sql_thongke_hoadonban_find, cols,sm.format(a),sm.format(b));
     }
       public List<ThongKespban> Chart1_sp_nam() {
 
@@ -578,9 +591,9 @@ public class thongkedao {
                 dataset.addValue(tk.getSoluong(), "Hóa Đơn", tk.getNgayDangKy());
             }
         }
-
+SimpleDateFormat sm=new SimpleDateFormat("dd.MM.yyyy");
         JFreeChart barChart = ChartFactory.createBarChart(
-                "Biểu đồ thống kê số lượng hóa đơn đã bán trong khoảng ngày: ".toUpperCase()+a+" Đến ngày "+b,
+                "Biểu đồ thống kê số lượng hóa đơn đã bán trong khoảng ngày: ".toUpperCase()+sm.format(a)+" Đến ngày "+sm.format(b),
                 "Thời gian", "Số lượng đơn ",
                 dataset, PlotOrientation.VERTICAL, false, true, false);
 
@@ -658,9 +671,10 @@ jpnItem.removeAll();
                 dataset.addValue(tk.getSoluong(), "Sản Phẩm", tk.getTensp());
             }
         }
+        SimpleDateFormat sm=new SimpleDateFormat("dd.MM.yyyy");
 
         JFreeChart barChart = ChartFactory.createBarChart(
-                "Biểu đồ thống kê số lượng Sản Phẩm đã bán trong khoảng ngày: ".toUpperCase()+a.getDate()+" Đến ngày "+b.getDate(),
+                "Biểu đồ thống kê số lượng Sản Phẩm đã bán trong khoảng ngày: ".toUpperCase()+sm.format(a)+" Đến ngày "+sm.format(b),
                 "Tên Sản Phẩm", "Số lượng Sản Phẩm ",
                 dataset, PlotOrientation.VERTICAL, false, true, false);
 

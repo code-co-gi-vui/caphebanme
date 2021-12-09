@@ -429,12 +429,15 @@ public class QuanLyHoaDonJPanel extends javax.swing.JPanel {
             int hoi = JOptionPane.showConfirmDialog(this, "Bạn có muốn hủy đơn này?", "Hủy Đơn", JOptionPane.YES_NO_OPTION);
             if (hoi == JOptionPane.YES_OPTION) {
                 String mail = JOptionPane.showInputDialog("Nhập Lý Do Hủy");
-           if(mail.isEmpty()){
+           if(mail==null){
                 JOptionPane.showMessageDialog(null, "vui lòng nhập Lý Do Hủy!");
                 return;
             }
+           if(mail!=null){
+               sv.huydon1((int) tblHoadon.getValueAt(index, 0),nv.getTenNV(),mail);
+           }
            
-                sv.huydon1((int) tblHoadon.getValueAt(index, 0),nv.getTenNV(),mail);
+                
             }
 
         }
