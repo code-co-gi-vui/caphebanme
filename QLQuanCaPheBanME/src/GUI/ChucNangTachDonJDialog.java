@@ -9,11 +9,14 @@ import DAO.BanChitietDAO;
 import DAO.BanDao;
 import DAO.HoaDonDAO;
 import DAO.HoadonchitietDAO;
+import DAO.NhanVienDAO;
 import DAO.SanPhamDao;
 import Entity.Ban;
 import Entity.BanChitiet;
 import Entity.Hoadon;
 import Entity.Hoadonchitiet;
+import Entity.NhanVien;
+import JDBCHelper.Auth;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -478,12 +481,12 @@ public Hoadonchitiet findToHDCT(String masp){
 //            }
         }
     }//GEN-LAST:event_tblHDchitietMouseReleased
-
+    NhanVien nvac = Auth.user;
     private void btnXedonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXedonActionPerformed
         // TODO add your handling code here:
         Hoadon hdgoc = DAOHD.selectById(idhd);
         Hoadon hdtach = new Hoadon();
-        hdtach.setIdNhanVien("NV1");
+        hdtach.setIdNhanVien(nvac.getId_Nhanvien());
         hdtach.setNgayTao(hdgoc.getNgayTao());
         hdtach.setTrangThai(true);
         hdtach.setTrangThaiTT(false);      
@@ -636,6 +639,7 @@ HoadonchitietDAO DAOhdct = new HoadonchitietDAO();
 HoaDonDAO DAOHD = new HoaDonDAO();
 SanPhamDao DAPSP = new SanPhamDao();
 BanChitietDAO DAObanct = new BanChitietDAO();
+NhanVienDAO nvdao = new NhanVienDAO();
 List<Hoadonchitiet> listbctduocXe = new ArrayList<>();
 List<Hoadonchitiet> listbctgoc;
 public void filltoTABLEhiendau(){
