@@ -426,6 +426,10 @@ public void setSizetblehoadonctt(){
             }
         });
         jScrollPane3.setViewportView(tblHoadonchitiet);
+        if (tblHoadonchitiet.getColumnModel().getColumnCount() > 0) {
+            tblHoadonchitiet.getColumnModel().getColumn(1).setMinWidth(0);
+            tblHoadonchitiet.getColumnModel().getColumn(1).setMaxWidth(0);
+        }
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -597,6 +601,10 @@ public void setSizetblehoadonctt(){
         ));
         tblSanPham.setRowHeight(20);
         jScrollPane2.setViewportView(tblSanPham);
+        if (tblSanPham.getColumnModel().getColumnCount() > 0) {
+            tblSanPham.getColumnModel().getColumn(0).setMinWidth(0);
+            tblSanPham.getColumnModel().getColumn(0).setMaxWidth(0);
+        }
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

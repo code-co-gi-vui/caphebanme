@@ -147,6 +147,10 @@ static int idban;
             }
         });
         jScrollPane1.setViewportView(tblHDchitiet);
+        if (tblHDchitiet.getColumnModel().getColumnCount() > 0) {
+            tblHDchitiet.getColumnModel().getColumn(0).setMinWidth(0);
+            tblHDchitiet.getColumnModel().getColumn(0).setMaxWidth(0);
+        }
 
         btnTachDon.setBackground(new java.awt.Color(255, 255, 255));
         btnTachDon.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -168,6 +172,10 @@ static int idban;
         ));
         tblHDchitiet1.setRowHeight(20);
         jScrollPane2.setViewportView(tblHDchitiet1);
+        if (tblHDchitiet1.getColumnModel().getColumnCount() > 0) {
+            tblHDchitiet1.getColumnModel().getColumn(0).setMinWidth(0);
+            tblHDchitiet1.getColumnModel().getColumn(0).setMaxWidth(0);
+        }
 
         btnXedon.setBackground(new java.awt.Color(255, 255, 255));
         btnXedon.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N

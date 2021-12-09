@@ -281,17 +281,17 @@ public class Printthongke {
        
         Document document = new Document(PageSize.A4, 50, 50, 50, 50);
         try {
-            File newFile = new File("C:\\Users\\ADMIN ASUS\\Desktop\\baocaongay.pdf");
+            File newFile = new File("D:\\Edrawsoft\\baocaongay.pdf");
             PdfWriter.getInstance(document, new FileOutputStream(newFile.getAbsoluteFile().getPath()));
             document.open();
-            Font f = new Font(BaseFont.createFont("C:\\Users\\ADMIN ASUS\\Downloads\\VietFontsWeb1_ttf\\vuArial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED));
+            Font f = new Font(BaseFont.createFont("C:\\Users\\HP\\Downloads\\system\\VietFontsWeb1_ttf\\vuArial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED));
             f.setSize(16);
-            Font f2 = new Font(BaseFont.createFont("C:\\Users\\ADMIN ASUS\\Downloads\\VietFontsWeb1_ttf\\vuArial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED));
+            Font f2 = new Font(BaseFont.createFont("C:\\Users\\HP\\Downloads\\system\\VietFontsWeb1_ttf\\vuArial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED));
             f2.setSize(12);
-            Font f3 = new Font(BaseFont.createFont("C:\\Users\\ADMIN ASUS\\Downloads\\VietFontsWeb1_ttf\\vuArial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED));
+            Font f3 = new Font(BaseFont.createFont("C:\\Users\\HP\\Downloads\\system\\VietFontsWeb1_ttf\\vuArial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED));
             f3.setSize(10);
            
-             Font f4 = new Font(BaseFont.createFont("C:\\Users\\ADMIN ASUS\\Downloads\\VietFontsWeb1_ttf\\vuArial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED));
+             Font f4 = new Font(BaseFont.createFont("C:\\Users\\HP\\Downloads\\system\\VietFontsWeb1_ttf\\vuArial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED));
             f4.setSize(14);
             f4.setColor(BaseColor.RED);
             //f.setStyle(Font.NORMAL);

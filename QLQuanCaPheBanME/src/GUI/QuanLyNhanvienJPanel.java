@@ -264,6 +264,10 @@ public class QuanLyNhanvienJPanel extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(tblNhanVienhd);
+        if (tblNhanVienhd.getColumnModel().getColumnCount() > 0) {
+            tblNhanVienhd.getColumnModel().getColumn(0).setMinWidth(0);
+            tblNhanVienhd.getColumnModel().getColumn(0).setMaxWidth(0);
+        }
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
