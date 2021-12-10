@@ -25,6 +25,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.text.DecimalFormat;
 import javax.swing.GroupLayout;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
@@ -93,11 +94,11 @@ public class PrintPdf {
             PdfPTable b = new PdfPTable(2);
             PdfPCell b1 = new PdfPCell(new Phrase("Tổng tiền: ", f2));
             b.addCell(b1).setBorder(0);
-            PdfPCell b2 = new PdfPCell(new Phrase(""+hd.getThanhTien(), f2));
+            PdfPCell b2 = new PdfPCell(new Phrase(""+chuyenSangTienTe(hd.getThanhTien()), f2));
             b.addCell(b2).setBorder(0);
             PdfPCell b3 = new PdfPCell(new Phrase("Tiền khách trả: ", f2));
             b.addCell(b3).setBorder(0);
-            PdfPCell b4 = new PdfPCell(new Phrase(""+tienkh, f2));
+            PdfPCell b4 = new PdfPCell(new Phrase(""+chuyenSangTienTe(tienkh), f2));
             b.addCell(b4).setBorder(0);
 //            PdfPCell b5 = new PdfPCell(new Phrase("Tiền thối: ", f2));
 //            b.addCell(b5).setBorder(0);
@@ -114,4 +115,27 @@ public class PrintPdf {
             e.printStackTrace();
         }
     }
+    public String chuyenSangTienTe(int tieString){
+    String patternTienTe = "###,###,###,###,### "+"VND"; 
+    DecimalFormat formatTienTe = new DecimalFormat(patternTienTe);
+    String stringTienTe = formatTienTe.format(tieString);
+    return stringTienTe;
+}
+
+public int tienChuyenSangSo(String tienso){
+    try {
+        String patternTienTe = "###,###,###,###,### "+"VND"; 
+        DecimalFormat formatTienTe = new DecimalFormat(patternTienTe);
+        int tienint = 0;
+        if (tienso.length() > 3 && tienso.endsWith(",000 VND")) {
+            tienint = Integer.parseInt(formatTienTe.parse(tienso).toString());
+        }else{
+            return 0;
+        }
+        return tienint;
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return 0;
+}
 }

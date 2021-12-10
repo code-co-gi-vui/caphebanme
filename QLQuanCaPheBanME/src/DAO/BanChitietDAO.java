@@ -29,6 +29,20 @@ public class BanChitietDAO implements InterfaceBanchitiet{
     String SELECT_donchinh = "SELECT * FROM dbo.Ban JOIN dbo.BanChiTiet ON BanChiTiet.ID_Ban = Ban.ID_Ban \n" +
         "JOIN dbo.HoaDon ON HoaDon.ID_Hoadon = BanChiTiet.ID_Hoadon WHERE dbo.HoaDon.Trangthai = 1\n" +
         "AND dbo.HoaDon.TTThanhtoan = 0 AND Donchinh = 1 AND BanChiTiet.ID_Hoadon = ?";
+    
+        
+    String select_final_all_ban_gop = "SELECT DISTINCT ID_Ban FROM dbo.BanChiTiet JOIN dbo.HoaDon ON HoaDon.ID_Hoadon = BanChiTiet.ID_Hoadon\n" +
+        "WHERE dbo.HoaDon.Trangthai = 1 AND dbo.HoaDon.TTThanhtoan = 0\n" +
+        "AND ID_Ban NOT IN (SELECT ID_Ban FROM dbo.BanChiTiet\n" +
+        "JOIN dbo.HoaDon ON HoaDon.ID_Hoadon = BanChiTiet.ID_Hoadon\n" +
+        "WHERE dbo.HoaDon.Trangthai = 1 AND dbo.HoaDon.TTThanhtoan = 0\n" +
+        "and Donchinh = 0) AND BanChiTiet.ID_Hoadon IN (SELECT BanChiTiet.ID_Hoadon FROM dbo.BanChiTiet\n" +
+        "JOIN dbo.HoaDon ON HoaDon.ID_Hoadon = BanChiTiet.ID_Hoadon\n" +
+        "WHERE dbo.HoaDon.Trangthai = 1 AND dbo.HoaDon.TTThanhtoan = 0\n" +
+        "and Donchinh = 0)\n" +
+        "ORDER BY ID_Ban ASC";
+    String select_final_idhd = "SELECT * FROM dbo.HoaDon JOIN dbo.BanChiTiet ON BanChiTiet.ID_Hoadon = HoaDon.ID_Hoadon \n" +
+        "WHERE TTThanhtoan = 0 AND dbo.HoaDon.Trangthai = 1 AND Donchinh = 1 and  BanChiTiet.ID_Hoadon = ?";
     @Override
     public void insert(BanChitiet Entity) {
         JDBCHelper.jdbcHelper.update(INSERT_SQL, Entity.getID_Ban(), Entity.getID_HoaDon(), Entity.getThoidiemCoNguoi(), Entity.isBanChinh());
@@ -105,6 +119,29 @@ public class BanChitietDAO implements InterfaceBanchitiet{
     
     public BanChitiet selectBydonchinh(int id) {
         List<BanChitiet> list = this.selectBySql(SELECT_donchinh, id);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+    
+        
+    public List<Integer> selectallbangop_final(){
+        List<Integer> list = new ArrayList<>();
+        try {
+            ResultSet rs = jdbcHelper.query(select_final_all_ban_gop);
+            while (rs.next()) {
+                list.add(rs.getInt("ID_Ban"));
+            }
+            rs.getStatement().getConnection().close();
+            return list;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    public BanChitiet select_final_idhd(int id) {
+        List<BanChitiet> list = this.selectBySql(select_final_idhd, id);
         if (list.isEmpty()) {
             return null;
         }

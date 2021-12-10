@@ -338,7 +338,7 @@ public void setSizetblehoadonctt(){
         txttienThoi.setText("0");
 
         jLabel18.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
-        jLabel18.setText("Tiền thối:");
+        jLabel18.setText("Tiền thừa:");
 
         btnThanhToan.setBackground(new java.awt.Color(0, 255, 0));
         btnThanhToan.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -490,15 +490,16 @@ public void setSizetblehoadonctt(){
                                 .addGroup(pnHoadonLayout.createSequentialGroup()
                                     .addGroup(pnHoadonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnHoadonLayout.createSequentialGroup()
+                                            .addGap(0, 0, Short.MAX_VALUE)
                                             .addComponent(jLabel16)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(txtTongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(18, 18, 18))
+                                            .addGap(18, 18, 18)
+                                            .addComponent(txtTongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGroup(pnHoadonLayout.createSequentialGroup()
                                             .addComponent(jLabel12)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                             .addComponent(lblMaHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                            .addGap(0, 0, Short.MAX_VALUE)))
+                                    .addGap(18, 18, 18)
                                     .addGroup(pnHoadonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addGroup(pnHoadonLayout.createSequentialGroup()
                                             .addComponent(jLabel19)
@@ -1884,7 +1885,8 @@ public void filltoTableHDCT(){
         }
         List<Hoadonchitiet> list = DAOHDCHITIET.selectByIDBan(numberDesk.getIdBan());
         if (list.isEmpty()) {
-            resetfalse();
+            //resetfalse();
+            txtTongTien.setText("0 VND");
             return;
         }
         for (Hoadonchitiet hdct : list) {
@@ -2093,49 +2095,102 @@ public void suaSl(String masp, int mahd){
 }
 
 public void doMauBanNhom(int idban, JButton button){
-    List<BanChitiet> listban = DAOBanCT.selectByIdBan(idban);
-    if (listban.isEmpty()) return;
-    List<Integer> listIDHD = DAOBanCT.selectallbangop();
-    if (listIDHD.isEmpty()) return;
-    if (listIDHD.get(0) == listban.get(0).getID_HoaDon()) {
-        button.setBackground(Color.BLUE);
-        if (listban.get(0).isBanChinh() == false) {
-            button.setForeground(Color.WHITE);
-        }
-    } 
-    else if (listIDHD.size() == 1) {
-            return;
-    }
-    else if (listIDHD.get(1) == listban.get(0).getID_HoaDon()) {
-        button.setBackground(Color.CYAN);
-        if (listban.get(0).isBanChinh() == false) {
-            button.setForeground(Color.WHITE);
-        }
-    }
-    else if (listIDHD.size() == 2) {
-            return;
-    }
-    else if (listIDHD.get(2) == listban.get(0).getID_HoaDon()) {
-        button.setBackground(Color.PINK);
-        if (listban.get(0).isBanChinh() == false) {
-            button.setForeground(Color.WHITE);
-        }
-    }
-    else if (listIDHD.size() == 3) {
-            return;
-    }
-    else if (listIDHD.get(3) == listban.get(0).getID_HoaDon()) {
-        button.setBackground(Color.GREEN);
-        if (listban.get(0).isBanChinh() == false) {
-            button.setForeground(Color.WHITE);
-        }
-    }
-    else if (listIDHD.size() == 4) {
-            return;
-    }
-    if (listIDHD.size() > 5) {
-        JOptionPane.showMessageDialog(this, "Giới hạn 4 bàn nhóm!!");
+//    List<BanChitiet> listban = DAOBanCT.selectByIdBan(idban);
+//    if (listban.isEmpty()) return;
+//    List<Integer> listIDHD = DAOBanCT.selectallbangop();
+//    if (listIDHD.isEmpty()) return;
+//    if (listIDHD.get(0) == listban.get(0).getID_HoaDon()) {
+//        button.setBackground(Color.BLUE);
+//        if (listban.get(0).isBanChinh() == false) {
+//            button.setForeground(Color.WHITE);
+//        }
+//    } 
+//    else if (listIDHD.size() == 1) {
+//            return;
+//    }
+//    else if (listIDHD.get(1) == listban.get(0).getID_HoaDon()) {
+//        button.setBackground(Color.CYAN);
+//        if (listban.get(0).isBanChinh() == false) {
+//            button.setForeground(Color.WHITE);
+//        }
+//    }
+//    else if (listIDHD.size() == 2) {
+//            return;
+//    }
+//    else if (listIDHD.get(2) == listban.get(0).getID_HoaDon()) {
+//        button.setBackground(Color.PINK);
+//        if (listban.get(0).isBanChinh() == false) {
+//            button.setForeground(Color.WHITE);
+//        }
+//    }
+//    else if (listIDHD.size() == 3) {
+//            return;
+//    }
+//    else if (listIDHD.get(3) == listban.get(0).getID_HoaDon()) {
+//        button.setBackground(Color.GREEN);
+//        if (listban.get(0).isBanChinh() == false) {
+//            button.setForeground(Color.WHITE);
+//        }
+//    }
+//    else if (listIDHD.size() == 4) {
+//            return;
+//    }
+//    if (listIDHD.size() > 5) {
+//        JOptionPane.showMessageDialog(this, "Giới hạn 4 bàn nhóm!!");
+//        return;
+//    }
+
+    List<Integer> listhdgop = DAOBanCT.selectallbangop_final();
+    if (listhdgop.isEmpty()) {
+        System.out.println("listhdgop");
         return;
+    }
+    List<BanChitiet> listslbct = DAOBanCT.selectByIdBan(idban);
+    if (listslbct.isEmpty()) {
+        return;
+    }
+    BanChitiet slbct = listslbct.get(0);
+    if (slbct == null) {
+        System.out.println("slbct");
+        return;
+    }
+    
+    if (slbct.isBanChinh()) {
+        if (listhdgop.get(0) == idban) {
+            button.setBackground(Color.BLUE);
+        }else if (listhdgop.size() == 1) {
+            return;
+        }
+        else if (listhdgop.get(1) == idban) {
+            button.setBackground(Color.GREEN);
+        }else if (listhdgop.size() == 2) {
+            return;
+        }
+        else if (listhdgop.get(2) == idban) {
+            button.setBackground(Color.PINK);
+        }
+    }else{
+        BanChitiet slhdbanct = DAOBanCT.select_final_idhd(slbct.getID_HoaDon());
+        if (slhdbanct == null) {
+            System.out.println("slhdbanct");
+            return;
+        }
+        if (listhdgop.get(0) == slhdbanct.getID_Ban()) {
+            button.setForeground(Color.WHITE);
+            button.setBackground(Color.BLUE);
+        }else if (listhdgop.size() == 1) {
+            return;
+        }
+        else if (listhdgop.get(1) == slhdbanct.getID_Ban()) {
+            button.setForeground(Color.WHITE);
+            button.setBackground(Color.GREEN);
+        }else if (listhdgop.size() == 2) {
+            return;
+        }
+        else if (listhdgop.get(2) == slhdbanct.getID_Ban()) {
+            button.setForeground(Color.WHITE);
+            button.setBackground(Color.PINK);
+        }
     }
 }
 }

@@ -178,9 +178,9 @@ boolean trangthaitao = false;
     private void btngopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btngopActionPerformed
         // TODO add your handling code here:
         trangthaitao = true;
-        List<Integer> listIDHD = DAObanct.selectallbangop();
-        if (listIDHD.size() == 4){
-            JOptionPane.showMessageDialog(this, "Tối đa 4 bàn nhóm");
+        List<Integer> listIDHD = DAObanct.selectallbangop_final();
+        if (listIDHD.size() == 3){
+            JOptionPane.showMessageDialog(this, "Tối đa 3 bàn nhóm");
             return;
         }
         BanChitiet bct = DAObanct.selectById(idban, idhoadon);
