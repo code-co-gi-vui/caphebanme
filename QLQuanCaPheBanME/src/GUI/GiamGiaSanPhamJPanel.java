@@ -510,7 +510,9 @@ public class GiamGiaSanPhamJPanel extends javax.swing.JPanel {
 
     private void btngiahanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btngiahanActionPerformed
         // TODO add your handling code here:
-        updateDate();
+        if (checkNull() && check()) {
+            updateDate();
+        }
     }//GEN-LAST:event_btngiahanActionPerformed
 
     private void tblSanPhamgiamchitietMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSanPhamgiamchitietMouseReleased
